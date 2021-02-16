@@ -21,6 +21,7 @@ public class User implements Serializable {
     private String phone;
     private String password;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private Set<Order> orders = new HashSet<>();
 
@@ -75,7 +76,6 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    @JsonIgnore
     public Set<Order> getOrders() {
         return orders;
     }
