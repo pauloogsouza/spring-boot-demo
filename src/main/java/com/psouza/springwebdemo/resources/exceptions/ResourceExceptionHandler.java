@@ -1,5 +1,6 @@
 package com.psouza.springwebdemo.resources.exceptions;
 
+import com.psouza.springwebdemo.services.exceptions.DatabaseException;
 import com.psouza.springwebdemo.services.exceptions.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,14 @@ public class ResourceExceptionHandler {
     public ResponseEntity<StandardError> resourceNotFound(ResourceNotFoundException e, HttpServletRequest request) {
         int status = HttpStatus.NOT_FOUND.value();
         String error = "Resource not found";
+        StandardError err = new StandardError(Instant.now(), status, error, e.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(status).body(err);
+    }
+
+    @ExceptionHandler(DatabaseException.class)
+    public ResponseEntity<StandardError> database(DatabaseException e, HttpServletRequest request) {
+        int status = HttpStatus.BAD_REQUEST.value();
+        String error = "Database error";
         StandardError err = new StandardError(Instant.now(), status, error, e.getMessage(), request.getRequestURI());
         return ResponseEntity.status(status).body(err);
     }
